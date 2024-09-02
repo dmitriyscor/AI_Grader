@@ -1,5 +1,5 @@
 #pragma once
-
+#include <iostream>
 namespace AIGrader {
 
 	using namespace System;
@@ -35,6 +35,13 @@ namespace AIGrader {
 			}
 		}
 	private: System::Windows::Forms::PictureBox^ pictureBox1;
+	private: System::Windows::Forms::Button^ buttonCreateNewChat;
+	private: System::Windows::Forms::Button^ MainMenuButton;
+	private: System::Windows::Forms::PictureBox^ chatBackground;
+	private: System::Windows::Forms::GroupBox^ messagesBox;
+	private: System::Windows::Forms::TextBox^ userInput;
+	private: System::Windows::Forms::Button^ submitToTheServer;
+
 	protected:
 
 	private:
@@ -50,34 +57,194 @@ namespace AIGrader {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			this->chatBackground = (gcnew System::Windows::Forms::PictureBox());
+			this->messagesBox = (gcnew System::Windows::Forms::GroupBox());
+
+
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(aiGraderUI::typeid));
 			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
+			this->buttonCreateNewChat = (gcnew System::Windows::Forms::Button());
+			this->MainMenuButton = (gcnew System::Windows::Forms::Button());
+			this->userInput = (gcnew System::Windows::Forms::TextBox());
+			this->submitToTheServer = (gcnew System::Windows::Forms::Button());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->SuspendLayout();
 			// 
 			// pictureBox1
 			// 
 			this->pictureBox1->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"pictureBox1.Image")));
-			this->pictureBox1->Location = System::Drawing::Point(225, 225);
+			this->pictureBox1->Location = System::Drawing::Point(1027, 12);
 			this->pictureBox1->Name = L"pictureBox1";
 			this->pictureBox1->Size = System::Drawing::Size(166, 166);
 			this->pictureBox1->SizeMode = System::Windows::Forms::PictureBoxSizeMode::AutoSize;
 			this->pictureBox1->TabIndex = 0;
 			this->pictureBox1->TabStop = false;
 			// 
+			// buttonCreateNewChat
+			// 
+			this->buttonCreateNewChat->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(11)),
+				static_cast<System::Int32>(static_cast<System::Byte>(8)), static_cast<System::Int32>(static_cast<System::Byte>(8)));
+			this->buttonCreateNewChat->Font = (gcnew System::Drawing::Font(L"Dubai", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->buttonCreateNewChat->ForeColor = System::Drawing::Color::White;
+			this->buttonCreateNewChat->Location = System::Drawing::Point(12, 75);
+			this->buttonCreateNewChat->Name = L"buttonCreateNewChat";
+			this->buttonCreateNewChat->Size = System::Drawing::Size(125, 57);
+			this->buttonCreateNewChat->TabIndex = 1;
+			this->buttonCreateNewChat->Text = L"Create new chat";
+			this->buttonCreateNewChat->UseVisualStyleBackColor = false;
+			this->buttonCreateNewChat->Click += gcnew System::EventHandler(this, &aiGraderUI::buttonCreateNewChat_Click);
+			// 
+			// MainMenuButton
+			// 
+			this->MainMenuButton->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(11)), static_cast<System::Int32>(static_cast<System::Byte>(8)),
+				static_cast<System::Int32>(static_cast<System::Byte>(8)));
+			this->MainMenuButton->Font = (gcnew System::Drawing::Font(L"Dubai", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->MainMenuButton->ForeColor = System::Drawing::Color::White;
+			this->MainMenuButton->Location = System::Drawing::Point(12, 12);
+			this->MainMenuButton->Name = L"MainMenuButton";
+			this->MainMenuButton->Size = System::Drawing::Size(158, 57);
+			this->MainMenuButton->TabIndex = 3;
+			this->MainMenuButton->Text = L"Main Menu";
+			this->MainMenuButton->UseVisualStyleBackColor = false;
+			this->MainMenuButton->Click += gcnew System::EventHandler(this, &aiGraderUI::MainMenuButton_Click);
+			// 
+			// userInput
+			// 
+			this->userInput->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(44)), static_cast<System::Int32>(static_cast<System::Byte>(40)),
+				static_cast<System::Int32>(static_cast<System::Byte>(40)));
+			this->userInput->Font = (gcnew System::Drawing::Font(L"Freestyle Script", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->userInput->ForeColor = System::Drawing::SystemColors::Window;
+			this->userInput->Location = System::Drawing::Point(189, 734);
+			this->userInput->Multiline = true;
+			this->userInput->Name = L"userInput";
+			this->userInput->Size = System::Drawing::Size(741, 54);
+			this->userInput->TabIndex = 5;
+			this->userInput->Visible = false;
+			// 
+			// submitToTheServer
+			// 
+			this->submitToTheServer->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(11)),
+				static_cast<System::Int32>(static_cast<System::Byte>(8)), static_cast<System::Int32>(static_cast<System::Byte>(8)));
+			this->submitToTheServer->Font = (gcnew System::Drawing::Font(L"Dubai", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->submitToTheServer->ForeColor = System::Drawing::Color::White;
+			this->submitToTheServer->Location = System::Drawing::Point(936, 734);
+			this->submitToTheServer->Name = L"submitToTheServer";
+			this->submitToTheServer->Size = System::Drawing::Size(85, 54);
+			this->submitToTheServer->TabIndex = 6;
+			this->submitToTheServer->Text = L"->";
+			this->submitToTheServer->UseVisualStyleBackColor = false;
+			this->submitToTheServer->Visible = false;
+			this->submitToTheServer->Click += gcnew System::EventHandler(this, &aiGraderUI::submitToTheServer_Click);
+			// 
 			// aiGraderUI
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(894, 542);
+			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(24)), static_cast<System::Int32>(static_cast<System::Byte>(20)),
+				static_cast<System::Int32>(static_cast<System::Byte>(20)));
+			this->ClientSize = System::Drawing::Size(1200, 800);
+			this->Controls->Add(this->submitToTheServer);
+			this->Controls->Add(this->userInput);
+			this->Controls->Add(this->MainMenuButton);
+			this->Controls->Add(this->buttonCreateNewChat);
 			this->Controls->Add(this->pictureBox1);
 			this->Name = L"aiGraderUI";
-			this->Text = L"aiGraderUI";
+			this->Text = L"AIGrader";
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->EndInit();
 			this->ResumeLayout(false);
 			this->PerformLayout();
 
 		}
 #pragma endregion
-	};
+	
+	private: System::Void buttonCreateNewChat_Click(System::Object^ sender, System::EventArgs^ e)
+	{
+		if (this->chatBackground != nullptr)
+		{
+			this->Controls->Remove(this->chatBackground);
+			this->chatBackground = nullptr;
+		}
+		if (this->messagesBox != nullptr)
+		{
+			this->Controls->Remove(this->messagesBox);
+			delete this->messagesBox; // Optional: Cleanup if needed
+			this->messagesBox = nullptr;
+		}
+
+
+		this->userInput->Visible = false;
+		this->submitToTheServer->Visible = false;
+
+
+
+
+		this->userInput->Visible = true;
+		this->submitToTheServer->Visible = true;
+
+		// Creating messagesBox
+		if (true)
+		{
+			this->messagesBox = (gcnew System::Windows::Forms::GroupBox());
+			this->messagesBox->BackColor = System::Drawing::Color::FromArgb(40, 40, 36);
+			this->messagesBox->Location = System::Drawing::Point(189, 0);
+			this->messagesBox->Name = L"messagesBox";
+			this->messagesBox->Size = System::Drawing::Size(832, 728);
+			this->messagesBox->TabIndex = 3;
+			this->messagesBox->TabStop = false;
+			this->messagesBox->Text = L"Messages";
+			this->Controls->Add(this->messagesBox);
+			std::cout << "group box was created" << std::endl;
+		}
+
+		// Creating background
+		
+		{
+			this->chatBackground = (gcnew System::Windows::Forms::PictureBox());
+			this->chatBackground->BackColor = System::Drawing::Color::FromArgb(40, 36, 36);
+			this->chatBackground->Location = System::Drawing::Point(176, 0);
+			this->chatBackground->Name = L"chatBackground";
+			this->chatBackground->Size = System::Drawing::Size(856, 813);
+			this->chatBackground->TabIndex = 2;
+			this->chatBackground->TabStop = false;
+			this->Controls->Add(this->chatBackground);
+		}
+
+		
+		
+		
+		
+		
+
+
+	}
+
+	private: System::Void MainMenuButton_Click(System::Object^ sender, System::EventArgs^ e) 
+	{
+		
+		if (this->chatBackground != nullptr)
+		{
+			this->Controls->Remove(this->chatBackground);
+			this->chatBackground = nullptr;
+		}
+		if (this->messagesBox != nullptr)
+		{
+			this->Controls->Remove(this->messagesBox);
+			delete this->messagesBox; // Optional: Cleanup if needed
+			this->messagesBox = nullptr;
+		}
+
+		
+		this->userInput->Visible = false;
+		
+		this->submitToTheServer->Visible = false;
+	}
+private: System::Void submitToTheServer_Click(System::Object^ sender, System::EventArgs^ e) 
+{
+	
+}
+};
 }
