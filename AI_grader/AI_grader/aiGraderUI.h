@@ -44,7 +44,10 @@ namespace AIGrader {
 	private: System::Windows::Forms::GroupBox^ messagesBox;
 	private: System::Windows::Forms::TextBox^ userInput;
 	private: System::Windows::Forms::Button^ submitToTheServer;
-	private: System::Windows::Forms::GroupBox^ chats;
+
+	private: System::Windows::Forms::Panel^ chats2;
+
+
 
 
 	protected:
@@ -70,7 +73,7 @@ namespace AIGrader {
 			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 			this->buttonCreateNewChat = (gcnew System::Windows::Forms::Button());
 			this->MainMenuButton = (gcnew System::Windows::Forms::Button());
-			this->chats = (gcnew System::Windows::Forms::GroupBox());
+			this->chats2 = (gcnew System::Windows::Forms::Panel());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chatBackground))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->SuspendLayout();
@@ -119,8 +122,8 @@ namespace AIGrader {
 			// 
 			this->buttonCreateNewChat->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(11)),
 				static_cast<System::Int32>(static_cast<System::Byte>(8)), static_cast<System::Int32>(static_cast<System::Byte>(8)));
-			this->buttonCreateNewChat->Font = (gcnew System::Drawing::Font(L"Dubai", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
-				static_cast<System::Byte>(0)));
+			this->buttonCreateNewChat->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular,
+				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
 			this->buttonCreateNewChat->ForeColor = System::Drawing::Color::White;
 			this->buttonCreateNewChat->Location = System::Drawing::Point(12, 75);
 			this->buttonCreateNewChat->Name = L"buttonCreateNewChat";
@@ -134,7 +137,7 @@ namespace AIGrader {
 			// 
 			this->MainMenuButton->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(11)), static_cast<System::Int32>(static_cast<System::Byte>(8)),
 				static_cast<System::Int32>(static_cast<System::Byte>(8)));
-			this->MainMenuButton->Font = (gcnew System::Drawing::Font(L"Dubai", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->MainMenuButton->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->MainMenuButton->ForeColor = System::Drawing::Color::White;
 			this->MainMenuButton->Location = System::Drawing::Point(12, 12);
@@ -145,15 +148,13 @@ namespace AIGrader {
 			this->MainMenuButton->UseVisualStyleBackColor = false;
 			this->MainMenuButton->Click += gcnew System::EventHandler(this, &aiGraderUI::MainMenuButton_Click);
 			// 
-			// chats
+			// chats2
 			// 
-			this->chats->Location = System::Drawing::Point(13, 154);
-			this->chats->Name = L"chats";
-			this->chats->Size = System::Drawing::Size(124, 599);
-			this->chats->TabIndex = 4;
-			this->chats->TabStop = false;
-			this->chats->Text = L"chats";
-			this->chats->Enter += gcnew System::EventHandler(this, &aiGraderUI::groupBox1_Enter);
+			this->chats2->AutoScroll = true;
+			this->chats2->Location = System::Drawing::Point(1027, 196);
+			this->chats2->Name = L"chats2";
+			this->chats2->Size = System::Drawing::Size(166, 300);
+			this->chats2->TabIndex = 5;
 			// 
 			// aiGraderUI
 			// 
@@ -162,7 +163,7 @@ namespace AIGrader {
 			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(24)), static_cast<System::Int32>(static_cast<System::Byte>(20)),
 				static_cast<System::Int32>(static_cast<System::Byte>(20)));
 			this->ClientSize = System::Drawing::Size(1200, 800);
-			this->Controls->Add(this->chats);
+			this->Controls->Add(this->chats2);
 			this->Controls->Add(this->MainMenuButton);
 			this->Controls->Add(this->buttonCreateNewChat);
 			this->Controls->Add(this->pictureBox1);
@@ -267,14 +268,14 @@ namespace AIGrader {
 		//CREATING BUTTON IN "CHATS" HERE
 		{
 			Button^ newChatButton = gcnew Button();
-			newChatButton->Text = L"Chat " + (this->chats->Controls->Count + 1).ToString();
+			newChatButton->Text = L"Chat " + (this->chats2->Controls->Count + 1).ToString();
 			newChatButton->Font = (gcnew System::Drawing::Font(L"Dubai", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			newChatButton->ForeColor = System::Drawing::SystemColors::Window;
 			newChatButton->Size = System::Drawing::Size(100, 35);
-			newChatButton->Location = System::Drawing::Point(10, this->chats->Controls->Count * 40 + 10); // Positioning the button
+			newChatButton->Location = System::Drawing::Point(10, this->chats2->Controls->Count * 40 + 10); // Positioning the button
 			newChatButton->Click += gcnew System::EventHandler(this, &aiGraderUI::OpenChat_Click);
-			this->chats->Controls->Add(newChatButton);
+			this->chats2->Controls->Add(newChatButton);
 		}
 		
 		
@@ -332,5 +333,7 @@ namespace AIGrader {
 		// Implement logic to load the chat associated with 'chatName'
 		
 	}
+private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+}
 };
 }
