@@ -1,5 +1,9 @@
 #pragma once
 #include <iostream>
+#include <msclr/marshal_cppstd.h> 
+
+#include <string>
+
 
 using namespace std;
 
@@ -315,23 +319,25 @@ namespace AIGrader {
 	}
 
 
-	private: System::Void submitToTheServer_Click(System::Object^ sender, System::EventArgs^ e) 
+	private: System::Void submitToTheServer_Click(System::Object^ sender, System::EventArgs^ e)
 	{
-		
+		//std::string userMessage = msclr::interop::marshal_as<std::string>(userInput->Text); 
+
+		//std::string response = ChatGPTAPI::GetResponse(userMessage);
+
+		//// Display the response in the console or send it to your UI
+		//std::cout << "API Response: " << response << std::endl;
+		//return response;
 	}
 
 	private: System::Void groupBox1_Enter(System::Object^ sender, System::EventArgs^ e) 
 	{
-
+		
 	}
 
 	private: System::Void OpenChat_Click(System::Object^ sender, System::EventArgs^ e)
 	{
-		Button^ clickedButton = safe_cast<Button^>(sender);
-		String^ chatName = clickedButton->Text;
 
-		// Implement logic to load the chat associated with 'chatName'
-		
 	}
 private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 }
