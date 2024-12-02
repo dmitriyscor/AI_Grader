@@ -1,71 +1,82 @@
-#include <stdio.h>
-#include <curl/curl.h>
-#include <string.h>
-#include <vector>
+#ifndef CURL_H
+#define CURL_H
 
-#define WINDOW_WIDTH 1497
-#define WINDOW_HEIGHT 998
-#define SIDEBAR_WIDTH 449
-#define MESSAGE_INPUT_HEIGHT 65
-#define SCROLL_SPEED 20
+#include <string>
+#include <curl/curl.h>  
 
-#define COLOR_GRAY (Color){69, 69, 69, 255}
 
-// Structs for data organization
-struct Message {
+
+
+struct Message 
+{
     std::string text;
     bool isAssistant;
 };
 
-struct Conversation {
+struct Conversation 
+{
     std::vector<Message> messages;
 };
 
-// Class for handling API requests
-class ChatGPTAPI {
-public:
-    static std::string GetResponse(const std::string& userMessage);
-private:
-    static size_t WriteCallback(void* content, size_t size, size_t nmemb, void* userp);
-};
-
-
-
-// Implementation for the ChatGPTAPI class
-size_t ChatGPTAPI::WriteCallback(void* content, size_t size, size_t nmemb, void* userp) {
-    size_t total_size = size * nmemb;
-    ((std::string*)userp)->append((char*)content, total_size);
-    return total_size;
+size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) 
+{
+    size_t totalSize = size * nmemb;
+    ((std::string*)userp)->append((char*)contents, totalSize);
+    return totalSize;
 }
 
-std::string ChatGPTAPI::GetResponse(const std::string& userMessage) {
-    CURL* curl = curl_easy_init();
-    std::string response;
 
-    if (curl) {
-        struct curl_slist* headers = NULL;
-        headers = curl_slist_append(headers, "Content-Type: application/json");
 
-        std::string auth_header = "Authorization: Bearer " + std::string(getenv("OPENAI_API_KEY") ? getenv("OPENAI_API_KEY") : "");
-        headers = curl_slist_append(headers, auth_header.c_str());
+namespace ChatGPTAPI 
+{
+    std::string GetResponse(const std::string& input);
 
-        std::string payload = "{\"model\": \"gpt-4.0-mini\", \"messages\": [{\"role\": \"user\", \"content\": \"" + userMessage + "\"}]}";
+    inline std::string GetResponse(const std::string& input) 
+    {
+        CURL* curl;
+        CURLcode res;
+        std::string response;
 
-        curl_easy_setopt(curl, CURLOPT_URL, "https://api.openai.com/v1/chat/completions");
-        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, payload.c_str());
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+        std::string apiKey = "PASTE YOUR KEY HERE";
 
-        CURLcode res = curl_easy_perform(curl);
-        if (res != CURLE_OK) {
-            fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+        // init curl
+        curl_global_init(CURL_GLOBAL_DEFAULT);
+        curl = curl_easy_init();
+
+        if (curl) 
+        {
+      
+            curl_easy_setopt(curl, CURLOPT_URL, "https://api.openai.com/v1/chat/completions");
+
+            curl_easy_setopt(curl, CURLOPT_POST, 1L);
+
+            struct curl_slist* headers = NULL;
+            headers = curl_slist_append(headers, "Content-Type: application/json");
+            headers = curl_slist_append(headers, ("Authorization: Bearer " + apiKey).c_str());
+            curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+
+            std::string postData = "{\"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"user\", \"content\": \"" + input + "\"}]}";
+            curl_easy_setopt(curl, CURLOPT_POSTFIELDS, postData.c_str());
+
+            curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+            curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+
+            res = curl_easy_perform(curl);
+
+            if (res != CURLE_OK) 
+            {
+                response = "cURL request failed: " + std::string(curl_easy_strerror(res));
+            }
+
+            curl_easy_cleanup(curl);
+            curl_slist_free_all(headers);
         }
 
-        curl_slist_free_all(headers);
-        curl_easy_cleanup(curl);
-    }
+        curl_global_cleanup();
 
-    return response;
+        return response;
+    }
 }
 
+
+#endif 
