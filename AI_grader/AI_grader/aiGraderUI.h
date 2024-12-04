@@ -1,9 +1,22 @@
 #pragma once
 #include <iostream>
+#include <map>
+#include <vector>
+#include <msclr/marshal_cppstd.h> 
+
+#include <curl/curl.h>
+
+#include "curl.h"
+
+#include <string>
+
 
 using namespace std;
 
-namespace AIGrader {
+namespace AIGrader 
+{
+
+
 
 	using namespace System;
 	using namespace System::ComponentModel;
@@ -12,11 +25,9 @@ namespace AIGrader {
 	using namespace System::Data;
 	using namespace System::Drawing;
 
-	/// <summary>
-	/// Summary for aiGraderUI
-	/// </summary>
 	public ref class aiGraderUI : public System::Windows::Forms::Form
 	{
+		
 	public:
 		aiGraderUI(void)
 		{
@@ -25,6 +36,8 @@ namespace AIGrader {
 			//TODO: Add the constructor code here
 			//
 		}
+
+		
 
 	protected:
 		/// <summary>
@@ -57,6 +70,7 @@ namespace AIGrader {
 		/// Required designer variable.
 		/// </summary>
 		System::ComponentModel::Container ^components;
+
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -286,6 +300,9 @@ namespace AIGrader {
 
 	}
 
+	
+
+
 	private: System::Void MainMenuButton_Click(System::Object^ sender, System::EventArgs^ e) 
 	{
 		
@@ -315,25 +332,35 @@ namespace AIGrader {
 	}
 
 
-	private: System::Void submitToTheServer_Click(System::Object^ sender, System::EventArgs^ e) 
+	private: System::Void submitToTheServer_Click(System::Object^ sender, System::EventArgs^ e)
 	{
+		string messageToBeSubmitted = msclr::interop::marshal_as<std::string>(this->userInput->Text);
+		cout << "Submitted to the server!" << endl;
+		cout << messageToBeSubmitted << endl;
+		cout << "-------------" << endl;
 		
+		cout << "AI resp: " << ChatGPTAPI::GetResponse(messageToBeSubmitted) << endl;
+		cout << "-------------" << endl;
+		this->userInput->Text = "";
 	}
 
 	private: System::Void groupBox1_Enter(System::Object^ sender, System::EventArgs^ e) 
 	{
-
+		
 	}
 
 	private: System::Void OpenChat_Click(System::Object^ sender, System::EventArgs^ e)
 	{
-		Button^ clickedButton = safe_cast<Button^>(sender);
-		String^ chatName = clickedButton->Text;
 
-		// Implement logic to load the chat associated with 'chatName'
-		
 	}
-private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
+
+private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) 
+{
+
 }
+
 };
+
 }
+
+
