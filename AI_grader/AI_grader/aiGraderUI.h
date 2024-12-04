@@ -61,7 +61,7 @@ namespace AIGrader
 	private: System::Windows::Forms::Panel^ chats2;
 
 
-
+		   
 
 	protected:
 
@@ -301,7 +301,31 @@ namespace AIGrader
 	}
 
 	
+	private: System::Void AddTextBubble(String^ message, bool isUserMessage)
+	{
+		// Create a new label for the message bubble
+		Label^ bubble = gcnew Label();
+		bubble->AutoSize = true;
+		bubble->MaximumSize = System::Drawing::Size(this->messagesBox->Width - 20, 0); // Ensure wrapping
+		bubble->Text = message;
+		bubble->BackColor = isUserMessage ? System::Drawing::Color::LightBlue : System::Drawing::Color::LightGray;
+		bubble->ForeColor = System::Drawing::Color::Black;
+		bubble->Padding = System::Windows::Forms::Padding(10);
+		bubble->Margin = System::Windows::Forms::Padding(10);
+		bubble->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 
+		// Position the bubble
+		int yOffset = 10;
+		for each (Control ^ existingBubble in this->messagesBox->Controls)
+		{
+			yOffset = Math::Max(yOffset, existingBubble->Bottom + 10);
+		}
+		bubble->Location = System::Drawing::Point(10, yOffset);
+
+		// Add the bubble to the messagesBox
+		this->messagesBox->Controls->Add(bubble);
+		this->messagesBox->ScrollControlIntoView(bubble); // Auto-scroll to the latest bubble
+	}
 
 	private: System::Void MainMenuButton_Click(System::Object^ sender, System::EventArgs^ e) 
 	{
