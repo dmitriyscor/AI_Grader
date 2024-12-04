@@ -37,7 +37,7 @@ namespace ChatGPTAPI
         CURLcode res;
         std::string response;
 
-        std::string apiKey = "PASTE YOUR KEY HERE";
+        std::string apiKey = "KEY";
 
         // init curl
         curl_global_init(CURL_GLOBAL_DEFAULT);
@@ -74,7 +74,12 @@ namespace ChatGPTAPI
 
         curl_global_cleanup();
 
-        return response;
+       
+        
+            
+        return response.substr(225);
+            
+       
     }
 }
 

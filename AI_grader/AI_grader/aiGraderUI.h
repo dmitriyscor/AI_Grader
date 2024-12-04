@@ -58,7 +58,8 @@ namespace AIGrader
 	private: System::Windows::Forms::TextBox^ userInput;
 	private: System::Windows::Forms::Button^ submitToTheServer;
 
-	private: System::Windows::Forms::Panel^ chats2;
+
+	private: System::Windows::Forms::Panel^ msgs;
 
 
 
@@ -87,7 +88,7 @@ namespace AIGrader
 			this->pictureBox1 = (gcnew System::Windows::Forms::PictureBox());
 			this->buttonCreateNewChat = (gcnew System::Windows::Forms::Button());
 			this->MainMenuButton = (gcnew System::Windows::Forms::Button());
-			this->chats2 = (gcnew System::Windows::Forms::Panel());
+			this->msgs = (gcnew System::Windows::Forms::Panel());
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->chatBackground))->BeginInit();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->pictureBox1))->BeginInit();
 			this->SuspendLayout();
@@ -162,13 +163,12 @@ namespace AIGrader
 			this->MainMenuButton->UseVisualStyleBackColor = false;
 			this->MainMenuButton->Click += gcnew System::EventHandler(this, &aiGraderUI::MainMenuButton_Click);
 			// 
-			// chats2
+			// panel1
 			// 
-			this->chats2->AutoScroll = true;
-			this->chats2->Location = System::Drawing::Point(1027, 196);
-			this->chats2->Name = L"chats2";
-			this->chats2->Size = System::Drawing::Size(166, 300);
-			this->chats2->TabIndex = 5;
+			this->msgs->Location = System::Drawing::Point(988, 226);
+			this->msgs->Name = L"panel1";
+			this->msgs->Size = System::Drawing::Size(200, 382);
+			this->msgs->TabIndex = 4;
 			// 
 			// aiGraderUI
 			// 
@@ -177,7 +177,7 @@ namespace AIGrader
 			this->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(24)), static_cast<System::Int32>(static_cast<System::Byte>(20)),
 				static_cast<System::Int32>(static_cast<System::Byte>(20)));
 			this->ClientSize = System::Drawing::Size(1200, 800);
-			this->Controls->Add(this->chats2);
+			this->Controls->Add(this->msgs);
 			this->Controls->Add(this->MainMenuButton);
 			this->Controls->Add(this->buttonCreateNewChat);
 			this->Controls->Add(this->pictureBox1);
@@ -282,14 +282,14 @@ namespace AIGrader
 		//CREATING BUTTON IN "CHATS" HERE
 		{
 			Button^ newChatButton = gcnew Button();
-			newChatButton->Text = L"Chat " + (this->chats2->Controls->Count + 1).ToString();
+			
 			newChatButton->Font = (gcnew System::Drawing::Font(L"Dubai", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			newChatButton->ForeColor = System::Drawing::SystemColors::Window;
 			newChatButton->Size = System::Drawing::Size(100, 35);
-			newChatButton->Location = System::Drawing::Point(10, this->chats2->Controls->Count * 40 + 10); // Positioning the button
-			newChatButton->Click += gcnew System::EventHandler(this, &aiGraderUI::OpenChat_Click);
-			this->chats2->Controls->Add(newChatButton);
+			
+			
+		
 		}
 		
 		
@@ -337,11 +337,41 @@ namespace AIGrader
 		string messageToBeSubmitted = msclr::interop::marshal_as<std::string>(this->userInput->Text);
 		cout << "Submitted to the server!" << endl;
 		cout << messageToBeSubmitted << endl;
-		cout << "-------------" << endl;
+
 		
-		cout << "AI resp: " << ChatGPTAPI::GetResponse(messageToBeSubmitted) << endl;
+
+		cout << "-------------" << endl;
+		string aiResponse = ChatGPTAPI::GetResponse(messageToBeSubmitted);
+		cout << "AI resp: " << aiResponse << endl;
+
 		cout << "-------------" << endl;
 		this->userInput->Text = "";
+
+
+
+		System::String^ myMsg = msclr::interop::marshal_as<System::String^>(messageToBeSubmitted);
+		System::String^ aiResponseStr = msclr::interop::marshal_as<System::String^>(aiResponse);
+
+
+
+		TextBox^ ms1 = gcnew TextBox();
+		ms1->Text = L"Me: " + (myMsg);
+		ms1->ReadOnly = 1;
+		ms1->Font = (gcnew System::Drawing::Font(L"Dubai", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		ms1->Location = System::Drawing::Point(100, 0);
+
+		
+		TextBox^ ms2 = gcnew TextBox();
+		ms2->Text = L"Chat: " + (aiResponseStr);
+		ms2->Font = (gcnew System::Drawing::Font(L"Dubai", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			static_cast<System::Byte>(0)));
+		ms2->ReadOnly = 1;
+		ms2->Location = System::Drawing::Point(10, 50);
+
+
+		this->msgs->Controls->Add(ms1);
+		this->msgs->Controls->Add(ms2);
 	}
 
 	private: System::Void groupBox1_Enter(System::Object^ sender, System::EventArgs^ e) 
