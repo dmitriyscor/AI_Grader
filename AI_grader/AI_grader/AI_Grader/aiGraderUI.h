@@ -1,6 +1,5 @@
 #pragma once
 #include <iostream>
-#include <fstream>
 #include <map>
 #include <vector>
 #include <msclr/marshal_cppstd.h> 
@@ -13,9 +12,6 @@
 
 
 using namespace std;
-
-
-
 
 namespace AIGrader 
 {
@@ -167,14 +163,12 @@ namespace AIGrader
 			this->MainMenuButton->UseVisualStyleBackColor = false;
 			this->MainMenuButton->Click += gcnew System::EventHandler(this, &aiGraderUI::MainMenuButton_Click);
 			// 
-			// msgs
+			// panel1
 			// 
-			this->msgs->ImeMode = System::Windows::Forms::ImeMode::On;
-			this->msgs->Location = System::Drawing::Point(199, 25);
-			this->msgs->Name = L"msgs";
-			this->msgs->Size = System::Drawing::Size(805, 700);
-			this->msgs->TabIndex = 10;
-			this->msgs->Visible = false;
+			this->msgs->Location = System::Drawing::Point(988, 226);
+			this->msgs->Name = L"panel1";
+			this->msgs->Size = System::Drawing::Size(200, 382);
+			this->msgs->TabIndex = 4;
 			// 
 			// aiGraderUI
 			// 
@@ -223,10 +217,9 @@ namespace AIGrader
 			delete this->submitToTheServer;
 			this->submitToTheServer = nullptr;
 		}
-		
 
 
-		//creating messagesBox
+		// Creating messagesBox
 		{
 			this->messagesBox = (gcnew System::Windows::Forms::GroupBox());
 			this->messagesBox->BackColor = System::Drawing::Color::FromArgb(40, 40, 36);
@@ -240,11 +233,11 @@ namespace AIGrader
 			std::cout << "group box was created" << std::endl;
 		}
 
-		//creating userInput	
+		// creating userInput	
 		{
 			this->userInput = (gcnew System::Windows::Forms::TextBox());
 			this->userInput->BackColor = System::Drawing::Color::FromArgb(40, 44, 40);
-			this->userInput->Font = (gcnew System::Drawing::Font(L"Dubai", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+			this->userInput->Font = (gcnew System::Drawing::Font(L"Freestyle Script", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(0)));
 			this->userInput->ForeColor = System::Drawing::SystemColors::Window;
 			this->userInput->Location = System::Drawing::Point(189, 734);
@@ -273,7 +266,7 @@ namespace AIGrader
 			this->Controls->Add(this->submitToTheServer);
 		}
 
-		//creating background
+		// Creating background
 		{
 			this->chatBackground = (gcnew System::Windows::Forms::PictureBox());
 			this->chatBackground->BackColor = System::Drawing::Color::FromArgb(40, 36, 36);
@@ -294,17 +287,15 @@ namespace AIGrader
 				static_cast<System::Byte>(0)));
 			newChatButton->ForeColor = System::Drawing::SystemColors::Window;
 			newChatButton->Size = System::Drawing::Size(100, 35);
-
+			
+			
+		
 		}
-
-		{
-			this->msgs->Controls->Clear();
-			this->msgs->Visible = true;
-		}
-
-
-
-
+		
+		
+		
+		
+		
 
 
 	}
@@ -338,25 +329,6 @@ namespace AIGrader
 			delete this->submitToTheServer;
 			this->submitToTheServer = nullptr;
 		}
-
-
-		vector<string> saveMessages;
-		for (int i = 0; i < this->msgs->Controls->Count; i++)
-		{
-			String^ message = this->msgs->Controls[i]->ToString();
-			saveMessages.push_back(msclr::interop::marshal_as<std::string>(message));  
-		}
-
-		saveMessagesToFile(saveMessages);
-
-		if (this->msgs->Visible) 
-		{
-			
-			this->msgs->Visible = false;
-			this->msgs->Controls->Clear(); 
-		}
-
-		
 	}
 
 
@@ -366,85 +338,56 @@ namespace AIGrader
 		cout << "Submitted to the server!" << endl;
 		cout << messageToBeSubmitted << endl;
 
+		
+
 		cout << "-------------" << endl;
 		string aiResponse = ChatGPTAPI::GetResponse(messageToBeSubmitted);
 		cout << "AI resp: " << aiResponse << endl;
-		cout << "-------------" << endl;
 
-	
+		cout << "-------------" << endl;
 		this->userInput->Text = "";
 
-	
+
+
 		System::String^ myMsg = msclr::interop::marshal_as<System::String^>(messageToBeSubmitted);
 		System::String^ aiResponseStr = msclr::interop::marshal_as<System::String^>(aiResponse);
 
-		//move existing controls up by one message height (60px)
-		for each(Control ^ control in this->msgs->Controls)
-		{
-			control->Location = System::Drawing::Point(control->Location.X, control->Location.Y - 60);
-		}
 
-		
-		int nextY = this->msgs->Height - 60; 
-		if (this->msgs->Controls->Count > 0)
-		{
-			Control^ lastControl = this->msgs->Controls[this->msgs->Controls->Count - 1];
-			nextY = lastControl->Location.Y + lastControl->Height; 
-		}
 
 		TextBox^ ms1 = gcnew TextBox();
-		ms1->Text = L"Me: " + myMsg;
-		ms1->ReadOnly = true;
+		ms1->Text = L"Me: " + (myMsg);
+		ms1->ReadOnly = 1;
 		ms1->Font = (gcnew System::Drawing::Font(L"Dubai", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 			static_cast<System::Byte>(0)));
-		ms1->Location = System::Drawing::Point(0, nextY);
-		ms1->Width = this->msgs->Width - 20;
-		ms1->Height = 40;
-		ms1->Multiline = true;
-
-
-		this->msgs->Controls->Add(ms1);
-		this->msgs->ScrollControlIntoView(ms1);
-
-		nextY += ms1->Height ; 
+		ms1->Location = System::Drawing::Point(100, 0);
 
 		
 		TextBox^ ms2 = gcnew TextBox();
-		ms2->Text = L"Chat: " + aiResponseStr;
-		ms2->ReadOnly = true;
+		ms2->Text = L"Chat: " + (aiResponseStr);
 		ms2->Font = (gcnew System::Drawing::Font(L"Dubai", 12, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
 			static_cast<System::Byte>(0)));
-		ms2->Location = System::Drawing::Point(0, nextY);
-		ms2->Width = this->msgs->Width - 20;
-		ms2->Height = 80;
-		ms2->Multiline = true;
+		ms2->ReadOnly = 1;
+		ms2->Location = System::Drawing::Point(10, 50);
 
+
+		this->msgs->Controls->Add(ms1);
 		this->msgs->Controls->Add(ms2);
-		this->msgs->AutoScroll = true;
-		this->msgs->ScrollControlIntoView(ms2);
-
 	}
 
-
-	public: void saveMessagesToFile(const vector<string>& messages)
+	private: System::Void groupBox1_Enter(System::Object^ sender, System::EventArgs^ e) 
 	{
-		std::ofstream outFile("conversation.txt", ios::out | ios::trunc);
-
-		if (outFile.is_open()) {
-			for (const string& message : messages)
-			{
-				outFile << message << endl;
-			}
-			outFile.close();
-			cout << "Conversation saved to conversation.txt" << endl;
-		}
-		else
-		{
-			cout << "Failed to open file for saving conversation!" << endl;
-		}
+		
 	}
-	
 
+	private: System::Void OpenChat_Click(System::Object^ sender, System::EventArgs^ e)
+	{
+
+	}
+
+private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) 
+{
+
+}
 
 };
 

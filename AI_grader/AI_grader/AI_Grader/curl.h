@@ -37,7 +37,7 @@ namespace ChatGPTAPI
         CURLcode res;
         std::string response;
 
-        std::string apiKey = "YOUR KEY GOES HERE";
+        std::string apiKey = "KEY";
 
         // init curl
         curl_global_init(CURL_GLOBAL_DEFAULT);
@@ -77,19 +77,7 @@ namespace ChatGPTAPI
        
         
             
-        size_t contentStartPos = response.find("\"content\": \"");
-        if (contentStartPos != std::string::npos) 
-        {
-            contentStartPos += 12; 
-
-            size_t contentEndPos = response.find("\"", contentStartPos);
-            if (contentEndPos != std::string::npos) 
-            {
-                return response.substr(contentStartPos, contentEndPos - contentStartPos); 
-            }
-        }
-
-        return "Error: Unable to extract content from response";
+        return response.substr(225);
             
        
     }
